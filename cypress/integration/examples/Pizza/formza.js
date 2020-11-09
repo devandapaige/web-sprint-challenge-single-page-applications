@@ -20,10 +20,23 @@ describe ('Testing two pages on local server', function () {
 //Form Inputs:
 const name = cy.get('input[name="name"]')
 const size = cy.get('input[name="pizzaSize"]')
+const sauce = cy.get('input[name="sauce"]')
+const onions = cy.get('input[name="onions"]')
+const basil = cy.get('input[name="basil"]')
+const instructions = cy.get('input[name="instructions"]')
+const submitZaBtn = cy.get(`button[class="addToOrder"]`)
 describe ('Testing the pizza from inputs and submits', () => {
    cy.visit('http://localhost:3000')
     pizzabtn().click();
     name().should('exisit');
     name().should('have.value', '')
     .type('Amanda Nelson').should('have.value', 'Amanda Nelson');
+    size().select("medium");
+    sauce().select("GarlicRanch");
+    onions().select("onions");
+    basil().select("basil");
+    instructions().type('None at this time, thanks!').should('have.value', 'None at this time, thanks!')
+    submitZaBtn().click();
+    name().should('have.value', '')
+    instructions().should('have.value', '')
 })
