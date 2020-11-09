@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const FormZa = () => {
   const defaultState = {
@@ -11,13 +12,28 @@ const FormZa = () => {
       "Well done? Extra Sauce? Let us know how to make your perfect pizza.",
   };
   const [formState, setFormState] = useState(defaultState);
+  const [post, setPost] = useState([]);
+  const [errors, setErrors] = useState({ ...defaultState, terms: "" });
 
   const handleChange = (e) => {
+    //Do I need this for the checkboxes?
+    const value =
+      e.target.value === "checkbox" ? e.target.checked : e.target.value;
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
-  //const inputChange = e => {}
 
-  const submitData = (e) => {};
+  const submitData = (e) => {
+    e.preventDefault();
+    console.log("Pizza Ordered and Submitted");
+
+    axios
+      .post("https://reqres.in/api/users", formState)
+      .then((res) => {
+        setPost(res.data);
+        console.log("Success", res);
+      })
+      .catch((err) => console.log(err.response));
+  };
 
   //ToggleSwitch for Stretch/Gluten Free Option:
   const ToggleSwitch = () => {
