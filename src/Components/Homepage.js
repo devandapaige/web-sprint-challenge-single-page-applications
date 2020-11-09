@@ -5,7 +5,7 @@ const Homepage = () => {
   return (
     <div className="homepage">
       <div className="pizzaHeader">
-        <h2>Your Favorite Food, Delivered While You Code.</h2>
+        <h2>Your Favorite Food,<br />Delivered While You Code</h2>
         <Link to={"/pizza"}>
           <button className="orderPizza">Pizza?</button>
         </Link>

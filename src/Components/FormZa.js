@@ -1,25 +1,36 @@
 import React, { useState } from "react";
 import axios from "axios";
+import * as yup from "yup";
 
 const FormZa = () => {
   const defaultState = {
-    name: "Your Name",
-    size: "medium",
-    sauce: "redsauce",
+    name: "",
+    size: "",
+    sauce: "",
     toppings: "",
     glutenfree: "",
     instructions:
-      "Well done? Extra Sauce? Let us know how to make your perfect pizza.",
+      "",
   };
   const [formState, setFormState] = useState(defaultState);
   const [post, setPost] = useState([]);
   const [errors, setErrors] = useState({ ...defaultState, terms: "" });
 
+  //Form Validation:
+  let formSchema = yup.object().shape({
+    name: yup
+      .string()
+      .required("Please unter your name")
+      .min(2, "Your Name must be at least 2 characters."),
+  });
   const handleChange = (e) => {
     //Do I need this for the checkboxes?
     const value =
       e.target.value === "checkbox" ? e.target.checked : e.target.value;
     setFormState({ ...formState, [e.target.name]: e.target.value });
+    if (e.target.name === "name") {
+      inputChange(e);
+    }
   };
 
   const submitData = (e) => {
@@ -30,9 +41,21 @@ const FormZa = () => {
       .post("https://reqres.in/api/users", formState)
       .then((res) => {
         setPost(res.data);
-        console.log("Success", res);
+        console.log("Success", res.data);
       })
       .catch((err) => console.log(err.response));
+  };
+  const inputChange = (e) => {
+    e.persist();
+    yup
+      .reach(formSchema, e.target.name)
+      .validate(e.target.value)
+      .then((valid) => {
+        setErrors({ ...errors, [e.target.name]: "" });
+      })
+      .catch((err) => {
+        setErrors({ ...errors, [e.target.name]: err.errors[0] });
+      });
   };
 
   //ToggleSwitch for Stretch/Gluten Free Option:
