@@ -31,6 +31,10 @@ footer {
   display: flex;
   justify-content: space-between;
 }
+footer a {
+  color: white;
+  text-decoration: none;
+}
 .formZaPage h2 {
   text-align: center;
 }
@@ -66,6 +70,10 @@ footer {
 .formZa input {
   display: block;
 }
+.sauces {
+  display: flex;
+  line-height: 1;
+}
 .sauces label {
   display: inline;
   font-size: 1rem;
@@ -79,6 +87,7 @@ footer {
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
+  line-height: 1.5;
 }
 .toppings label {
   display: inline;
@@ -99,7 +108,7 @@ footer {
 }
 .formZa textarea {
   display: block;
-  width: 60%;
+  width: 70%;
 }
 .toggle-switch-checkbox {
   display: inline;
@@ -108,4 +117,13 @@ footer {
   display: inline;
   font-size: 1rem;
   padding: 0 1rem 0 0;
+}
+.addToOrder {
+  padding: 0.5rem;
+  margin: 1rem 0 0 0;
+  background-color: darkred;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: white;
 }

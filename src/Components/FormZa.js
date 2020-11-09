@@ -1,4 +1,4 @@
-import React, { useState, UseEffect } from "react";
+import React, { useState } from "react";
 
 const FormZa = () => {
   const defaultState = {
@@ -28,7 +28,7 @@ const FormZa = () => {
           className="toggle-switch-checkbox"
           name="glutenfree"
           id="glutenfree"
-        /> 
+        />
         <label className="toggle-switch-label" htmlFor="glutenfree">
           <span className="toggle-switch-inner" />
           <span className="toggle-switch-switch" />
@@ -36,7 +36,7 @@ const FormZa = () => {
         </label>
       </div>
     );
-  }
+  };
   return (
     <div className="formZaPage">
       <h2>Build Your Own Pizza</h2>
@@ -263,7 +263,7 @@ const FormZa = () => {
               id="instructions"
             />
           </label>
-          <button>Add to Order</button>
+          <button className="addToOrder">Add to Order</button>
         </form>
       </div>
     </div>

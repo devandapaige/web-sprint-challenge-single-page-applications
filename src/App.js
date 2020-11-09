@@ -15,7 +15,7 @@ const App = () => {
       <Route exact path="/" component={Homepage} />
       <Route path="/pizza" component={FormZa} />
       <footer>
-        <p>Coded by Amanda Nelson</p>
+        <p><a href="https://github.com/devandapaige">Coded by Amanda Nelson</a></p>
         <p>2020</p>
       </footer>
     </div>
