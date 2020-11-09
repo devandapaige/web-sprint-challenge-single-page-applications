@@ -22,6 +22,7 @@ const FormZa = () => {
       .min(2, "Your Name must be at least 2 characters."),
   });
   const handleChange = (e) => {
+    e.persist();
     const value =
       e.target.value === "checkbox" ? e.target.checked : e.target.value;
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -32,8 +33,8 @@ const FormZa = () => {
         setErrors({...errors, [e.target.name]: ""})
       })
       .catch(err => {
-        console.log(err);
-        setErrors({...errors, [e]: err.errors})
+        console.log(err.message)
+        setErrors({...errors, [e.target.name]: err.errors[0]})
       })
     }
   };
@@ -64,7 +65,9 @@ useEffect(() => {
           type="checkbox"
           className="toggle-switch-checkbox"
           name="glutenfree"
+          value="glutenfree"
           id="glutenfree"
+          unchecked
         />
         <label className="toggle-switch-label" htmlFor="glutenfree">
           <span className="toggle-switch-inner" />
