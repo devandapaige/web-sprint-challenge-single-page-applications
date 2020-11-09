@@ -1,20 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import * as yup from "yup";
 
 const FormZa = () => {
   const defaultState = {
-    name: "",
-    size: "",
-    sauce: "",
-    toppings: "",
-    glutenfree: "",
-    instructions:
-      "",
+    name: '',
+    pizzaSize: '',
+    sauce: "OriginalRed",
+    instructions: '',
   };
   const [formState, setFormState] = useState(defaultState);
   const [post, setPost] = useState([]);
-  const [errors, setErrors] = useState({ ...defaultState, terms: "" });
+  const [errors, setErrors] = useState(defaultState);
+  const [newPizza, setnewPizza] = useState(defaultState)
 
   //Form Validation:
   let formSchema = yup.object().shape({
@@ -24,40 +22,40 @@ const FormZa = () => {
       .min(2, "Your Name must be at least 2 characters."),
   });
   const handleChange = (e) => {
-    //Do I need this for the checkboxes?
     const value =
       e.target.value === "checkbox" ? e.target.checked : e.target.value;
     setFormState({ ...formState, [e.target.name]: e.target.value });
     if (e.target.name === "name") {
-      inputChange(e);
+      yup.reach(formSchema, e.target.name)
+      .validate(e.target.value)
+      .then(valid => {
+        setErrors({...errors, [e.target.name]: ""})
+      })
+      .catch(err => {
+        console.log(err);
+        setErrors({...errors, [e]: err.errors})
+      })
     }
   };
+
+useEffect(() => {
+  formSchema.isValid(newPizza).then(valid => {
+    console.log("valid")
+  })
+}, [newPizza])
 
   const submitData = (e) => {
     e.preventDefault();
     console.log("Pizza Ordered and Submitted");
-
     axios
       .post("https://reqres.in/api/users", formState)
       .then((res) => {
         setPost(res.data);
         console.log("Success", res.data);
+        document.getElementById("wholeForm").reset();
       })
       .catch((err) => console.log(err.response));
   };
-  const inputChange = (e) => {
-    e.persist();
-    yup
-      .reach(formSchema, e.target.name)
-      .validate(e.target.value)
-      .then((valid) => {
-        setErrors({ ...errors, [e.target.name]: "" });
-      })
-      .catch((err) => {
-        setErrors({ ...errors, [e.target.name]: err.errors[0] });
-      });
-  };
-
   //ToggleSwitch for Stretch/Gluten Free Option:
   const ToggleSwitch = () => {
     return (
@@ -86,11 +84,17 @@ const FormZa = () => {
       />
       <div className="formZa">
         <h2>Build Your Own Pizza</h2>
-        <form onSubmit={submitData} className="wholeForm">
+        <form onSubmit={submitData} id="wholeForm">
           <hr />
-          <label htmlfor="name">
+          <label htmlFor="name">
             Your Name<span className="formHelp">Required</span>
-            <input id="name" label="name" value={formState.name} />
+            <input 
+            name="name"
+            type="text" 
+            id="name" 
+            label="name" 
+            required
+            onChange={handleChange}/>
           </label>
           <hr />
           <label htmlFor="pizzaSize">
@@ -99,8 +103,10 @@ const FormZa = () => {
               id="pizzaSize"
               name="pizzaSize"
               onChange={handleChange}
-              value={formState.size}
+              defaultValue={formState.size}
+              required
             >
+            <option value="">----</option>
               <option value="small">Small (10in, 2-3ppl)</option>
               <option value="medium">Medium (12in, 3-4ppl)</option>
               <option value="large">Large (14in, 3-5ppl)</option>
@@ -116,6 +122,7 @@ const FormZa = () => {
                 id="OriginalRed"
                 name="sauce"
                 value="OriginalRed"
+                checked
                 onChange={handleChange}
               />
               <label htmlFor="OriginalRed">Original Red</label>
@@ -148,9 +155,10 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="pepperoni"
-                  name="toppings"
+                  name="pepperoni"
                   value="pepperoni"
                   onChange={handleChange}
+                  unchecked
                 />
                 Pepperoni
               </label>
@@ -158,7 +166,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="sausage"
-                  name="toppings"
+                  name="sausage"
                   value="sausage"
                   onChange={handleChange}
                 />
@@ -168,7 +176,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="canadianbacon"
-                  name="toppings"
+                  name="canadianbacon"
                   value="canadianbacon"
                   onChange={handleChange}
                 />
@@ -178,7 +186,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="spicysausage"
-                  name="toppings"
+                  name="spicysausage"
                   value="spicysausage"
                   onChange={handleChange}
                 />
@@ -188,7 +196,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="chicken"
-                  name="toppings"
+                  name="chicken"
                   value="chicken"
                   onChange={handleChange}
                 />
@@ -198,7 +206,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="onions"
-                  name="toppings"
+                  name="onions"
                   value="onions"
                   onChange={handleChange}
                 />
@@ -208,7 +216,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="peppers"
-                  name="toppings"
+                  name="peppers"
                   value="peppers"
                   onChange={handleChange}
                 />
@@ -218,7 +226,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="tomato"
-                  name="toppings"
+                  name="tomato"
                   value="tomato"
                   onChange={handleChange}
                 />
@@ -228,7 +236,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="olives"
-                  name="toppings"
+                  name="olives"
                   value="olives"
                   onChange={handleChange}
                 />
@@ -238,7 +246,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="garlic"
-                  name="toppings"
+                  name="garlic"
                   value="garlic"
                   onChange={handleChange}
                 />
@@ -248,7 +256,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="banpepper"
-                  name="toppings"
+                  name="banpepper"
                   value="banpepper"
                   onChange={handleChange}
                 />
@@ -258,7 +266,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="artichoke"
-                  name="toppings"
+                  name="artichoke"
                   value="artichoke"
                   onChange={handleChange}
                 />
@@ -268,7 +276,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="motz"
-                  name="toppings"
+                  name="motz"
                   value="motz"
                   onChange={handleChange}
                 />
@@ -278,7 +286,7 @@ const FormZa = () => {
                 <input
                   type="checkbox"
                   id="basil"
-                  name="toppings"
+                  name="basil"
                   value="basil"
                   onChange={handleChange}
                 />
@@ -300,10 +308,11 @@ const FormZa = () => {
               name="instructions"
               value={formState.instructions}
               onChange={handleChange}
+              defaultValue=""
               id="instructions"
             />
           </label>
-          <button className="addToOrder">Add to Order</button>
+          <button type="submit" className="addToOrder">Add to Order</button>
         </form>
       </div>
     </div>
